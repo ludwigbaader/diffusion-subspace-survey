@@ -4,7 +4,10 @@ import { DefaultLight } from "survey-core/themes";
 import { useCallback } from 'react';
 import { registerSortableImages } from './SortableImages';
 
+
+// register custom question components
 registerSortableImages();
+
 
 // json definition of the survey
 const surveyJson = {

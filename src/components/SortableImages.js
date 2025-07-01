@@ -61,7 +61,9 @@ Serializer.addClass(
 export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
    constructor(props) {
       super(props);
-      this.state = { value: this.question.value };
+      this.state = { 
+         value: this.question.value
+      };
    }
 
    get question() {
@@ -82,6 +84,12 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
       choices.forEach(elem => {
          image_urls.push(elem.url);
       });
+
+      const handleImageOrderChange = (newOrder) => {
+         // Update the question's value with the new order
+         this.question.value = newOrder;
+         console.log("New order:", newOrder);
+      };
 
       const axisStyle = {
          display: "flex",
@@ -116,7 +124,7 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
             <div style={{ flex: 1 }}>
                <ImageSorter 
                   images={choices} 
-                  onChange={(order) => console.log("New order:", order)}
+                  onChange={handleImageOrderChange}
                />
             </div>
          </div>

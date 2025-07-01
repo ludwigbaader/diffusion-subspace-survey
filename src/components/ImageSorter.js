@@ -7,7 +7,9 @@ export const ImageSorter = ({ images, onChange }) => {
 
    const handleChange = (order) => {
       setImageList(order);
-      if (onChange) onChange(order);
+      let ids_order = [];
+      order.forEach(elem => ids_order.push(elem.id));
+      if (onChange) onChange(ids_order);
    };
 
    const handleStart = (evt) => {
