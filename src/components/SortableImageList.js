@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { ReactSortable } from "react-sortablejs";
 
-export const ImageSorter = ({ images, onChange }) => {
+export const SortableImageList = ({ images, onChange }) => {
    const [imageList, setImageList] = useState(images);
    const [draggedItemId, setDraggedItemId] = useState(null);
 
@@ -22,7 +22,7 @@ export const ImageSorter = ({ images, onChange }) => {
    };
 
    return (
-      <div style={{ width: "100%", maxWidth: "400px", margin: "0" }}>
+      <div style={{ width: "100%", margin: "0" }}>
          <ReactSortable 
             tag="div" 
             list={imageList} 
@@ -39,11 +39,17 @@ export const ImageSorter = ({ images, onChange }) => {
                   alignItems: "center",
                   gap: "15px",
                   padding: "10px", 
-                  width: "100%",
+                  // width: "100%",
                   cursor: "grab",
                   opacity: isDragged ? 0.3 : 1,
                   filter: isDragged ? "grayscale(100%)" : "none",
-                  transition: "opacity 0.2s ease, filter 0.2s ease"
+                  transition: "opacity 0.2s ease, filter 0.2s ease",
+                  backgroundColor: "#efefef",
+                  borderRadius: "8px",
+                  // borderStyle: "solid",
+                  // borderWidth: "1px",
+                  // borderColor: "#ddd",
+                  // boxShadow: "0px 0px 4px #bbb"
                };
 
                const numberStyle = {
@@ -56,7 +62,9 @@ export const ImageSorter = ({ images, onChange }) => {
 
                const imageContainerStyle = {
                   flex: 1,
-                  maxWidth: "200px"
+                  maxWidth: "200px",
+                  alignItems: "center",
+                  justifyContent: "center"
                };
                
                return (
@@ -70,7 +78,7 @@ export const ImageSorter = ({ images, onChange }) => {
                               width: "100%", 
                               height: "auto",
                               borderRadius: "8px",
-                              display: "block"
+                              display: "block",
                            }} 
                         />
                      </div>

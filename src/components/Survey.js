@@ -3,10 +3,15 @@ import { Model, Survey } from 'survey-react-ui';
 import { DefaultLight } from "survey-core/themes";
 import { useCallback } from 'react';
 import { registerSortableImages } from './SortableImages';
+import { registerImageSlider } from './ImageSlider';
+import { registerImagePositioner } from './ImagePositioner';
+import { type } from '@testing-library/user-event/dist/type';
 
 
 // register custom question components
 registerSortableImages();
+registerImageSlider();
+registerImagePositioner();
 
 
 // json definition of the survey
@@ -39,27 +44,40 @@ const surveyJson = {
       name: "Page01",
       title: "Subspaces",
       elements: [{
-         type: "text",
-         name: "Dummy",
-         title: "Dummy question"
-      }, {
-         type: "ranking",
-         name: "RankImages01",
-         title: "Rank these images according to the given attribute",
-         choices: ["image_01", "image_02", "image_03"]
-      }, {
          type: "sortable-images",
          name: "SortImages",
          title: "Rank these images according to the attribute",
          choices: [
             { url: "/img/image_0000.jpg", id: "01" },
-            { url: "/img/image_0000.jpg", id: "02" },
-            { url: "/img/image_0000.jpg", id: "03" },
+            { url: "/img/image_0001.jpg", id: "02" },
+            { url: "/img/image_0002.jpg", id: "03" },
          ],
          attribute: {
             start: "photorealistic",
             end: "stylized"
          }
+      }, {
+         type: "image-slider",
+         name: "ImageSlider01",
+         title: "Select a position",
+         sliderPosition: 0.0,
+         sourceImages: [
+            "/img/image_0000.jpg",
+            "/img/image_0001.jpg",
+            "/img/image_0002.jpg",
+            "/img/image_0003.jpg",
+            "/img/image_0004.jpg",
+         ]
+      }, {
+         type: "image-positioner",
+         name: "ImagePositioner01",
+         title: "Select the position you would place the image at in the grid",
+         position: [0.5, 0.5],
+         image: "/img/image_0000.jpg",
+         axisLabels: [
+            ["photorealistic", "stylized"],
+            ["warm and colorful", "cold and desaturated"]
+         ]
       }]
    }]
 };

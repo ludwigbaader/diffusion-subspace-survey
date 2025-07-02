@@ -1,16 +1,16 @@
 import { createElement } from "react";
-import { Question, ElementFactory, Serializer, createPopupViewModel } from "survey-core";
+import { Question, ElementFactory, Serializer } from "survey-core";
 import { SurveyQuestionElementBase, ReactQuestionFactory } from "survey-react-ui";
-import { ImageSorter } from "./ImageSorter";
+import { SortableImageList } from "./SortableImageList";
 
 // Custom question type SortableImages
 // shows a list of images the user can rearrange to change their order
 
-const CUSTOM_TYPE = "sortable-images";
+const SORTABLE_IMAGE_COMPONENT = "sortable-images";
 
 export class QuestionSortableImagesModel extends Question {
    getType() {
-      return CUSTOM_TYPE;
+      return SORTABLE_IMAGE_COMPONENT;
    }
    
    // define custom attributes this question supports
@@ -34,7 +34,7 @@ export class QuestionSortableImagesModel extends Question {
 
 export function registerSortableImages() {
    ElementFactory.Instance.registerElement(
-      CUSTOM_TYPE,
+      SORTABLE_IMAGE_COMPONENT,
       (name) => {
          return new QuestionSortableImagesModel(name);
       }
@@ -42,7 +42,7 @@ export function registerSortableImages() {
 }
 
 Serializer.addClass(
-   CUSTOM_TYPE,
+   SORTABLE_IMAGE_COMPONENT,
    [{
       name: "choices",
       category: "general",
@@ -88,44 +88,49 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
       const handleImageOrderChange = (newOrder) => {
          // Update the question's value with the new order
          this.question.value = newOrder;
-         console.log("New order:", newOrder);
       };
 
       const axisStyle = {
          display: "flex",
          flexDirection: "column",
          justifyContent: "space-between",
-         alignItems: "center",
+         alignItems: "end",
          alignSelf: "stretch",
-         width: "60px",
+         // width: "60px",
+         height: "100%",
          padding: "0 10px",
-         marginRight: "20px",
-         borderRight: "2px solid #ddd",
+         //marginLeft: "50px",
+         //borderLeft: "2px solid #ddd",
          fontSize: "14px",
          fontWeight: "bold",
-         color: "#555"
+         color: "#555",
       };
 
       const axisLabelStyle = {
          writingMode: "vertical-rl",
          textOrientation: "mixed",
-         textAlign: "center",
-         padding: "5px"
+         textAlign: "left",
+         padding: "10px",
+         transform: "rotate(180deg)"
       };
       
       return (
-         <div style={{ display: "flex", alignItems: "stretch" }}>
-            {attribute && (
-               <div style={axisStyle}>
-                  <div style={axisLabelStyle}>{attribute.start}</div>
-                  <div style={{ ...axisLabelStyle, transform: "rotate(180deg)" }}>{attribute.end}</div>
+         <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ display: "flex", position: "relative" }}>
+               <div style={{ position: "absolute", height: "100%", left: "-60px" }}>
+                  {attribute && (
+                     <div style={axisStyle}>
+                        <div style={axisLabelStyle}>{attribute.start}</div>
+                        <div style={axisLabelStyle}>{attribute.end}</div>
+                     </div>
+                  )}
                </div>
-            )}
-            <div style={{ flex: 1 }}>
-               <ImageSorter 
-                  images={choices} 
-                  onChange={handleImageOrderChange}
-               />
+               <div>
+                  <SortableImageList
+                     images={choices}
+                     onChange={handleImageOrderChange}
+                  />
+               </div>
             </div>
          </div>
       )
@@ -140,6 +145,9 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
    }
 }
 
-ReactQuestionFactory.Instance.registerQuestion(CUSTOM_TYPE, (props) => {
-   return createElement(SurveyQuestionSortableImages, props);
-});
+ReactQuestionFactory.Instance.registerQuestion(
+   SORTABLE_IMAGE_COMPONENT, 
+   (props) => {
+      return createElement(SurveyQuestionSortableImages, props);
+   }
+);
