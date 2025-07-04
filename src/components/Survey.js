@@ -5,19 +5,36 @@ import { useCallback } from 'react';
 import { registerSortableImages } from './SortableImages';
 import { registerImageSlider } from './ImageSlider';
 import { registerImagePositioner } from './ImagePositioner';
-import { type } from '@testing-library/user-event/dist/type';
+import { registerDescriptiveText } from './DescriptiveText';
+import { registerLikertScale } from './LikertScale';
 
 
 // register custom question components
 registerSortableImages();
 registerImageSlider();
 registerImagePositioner();
+registerDescriptiveText();
+registerLikertScale();
 
 
 // json definition of the survey
 const surveyJson = {
    title: "Diffusion Model Subspaces",
    pages: [{
+      name: "Introduction",
+      title: "Controllability of AI Image Generation",
+      elements: [{
+         type: "descriptive-text",
+         name: "IntroductionText",
+         textSize: "large",
+         heading: "Welcome to this survey!",
+         caption: "test schmest"
+      }, {
+         type: "boolean",
+         name: "AcceptParticipation",
+         title: "I accept that my data will be used for scientific purposes"
+      }]
+   }, {
       name: "DemographicData",
       title: "Demographic Data",
       elements: [{
@@ -36,9 +53,10 @@ const surveyJson = {
          title: "Select your highest degree of education:",
          choices: ["Less than high school degree", "High school degree or equivalent", "Bachelor degree", "Graduate degree (Masters, PhD, M.D)"]
       }, {
-         type: "boolean",
-         name: "CreativeProfessional",
-         title: "Are you a creative professional that works with visual media?"
+         type: "rating",
+         name: "AiFamiliarity",
+         title: "How often to you use AI image generation models?",
+         description: "Never used, regularly"
       }]
    }, {
       name: "Page01",
