@@ -96,6 +96,15 @@ const surveyJson = {
             ["photorealistic", "stylized"],
             ["warm and colorful", "cold and desaturated"]
          ]
+      }, {
+         type: "likert-scale",
+         name: "LikertScale01",
+         title: "How much do you agree with the statement blue is the best color?",
+         numOfChoices: 7,
+         categoryNames: [
+            "Not at all",
+            "Absolutely agree"
+         ]
       }]
    }]
 };

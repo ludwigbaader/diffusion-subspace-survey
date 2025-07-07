@@ -1,6 +1,7 @@
 import { createElement } from "react";
 import { ElementFactory, Question, Serializer } from "survey-core";
 import { ReactQuestionFactory, SurveyQuestionElementBase } from "survey-react-ui";
+import { LikertScaleButton } from "./LikertScaleButton";
 
 const LIKERT_SCALE_COMPONENT = "likert-scale";
 
@@ -70,8 +71,45 @@ export class SurveyQuestionLikertScale extends SurveyQuestionElementBase {
    }
 
    renderElement() {
+      const handleSelect = (id) => {
+         this.question.value = Number(id);
+         console.log("Updated the question value: " + id);
+      }
+
+      const likert_element = (id) => { 
+         return (
+            <LikertScaleButton id={id} onClick={handleSelect} isSelected={id == this.question.value} />
+         );
+      };
+      const likert_buttons = [];
+      for (let i = 1; i <= this.numOfChoices; i++) {
+         likert_buttons.push(likert_element(i));
+      }
+
+      const categoryStyle = {
+         width: "15%",
+         whiteSpace: "normal",
+         overflowWrap: "break-word"
+      }
+
       return (
-         <div></div>
+         <div style={{ 
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            color: "#000",
+            fontSize: "small"
+         }}>
+            <div style={categoryStyle}>
+               {this.categoryNames[0]}
+            </div>
+            <div style={{ display: "flex" }}>
+               {likert_buttons}
+            </div>
+            <div style={categoryStyle}>
+               {this.categoryNames[1]}
+            </div>
+         </div>
       );
    }
 }
