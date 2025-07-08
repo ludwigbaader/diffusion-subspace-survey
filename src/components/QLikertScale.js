@@ -78,7 +78,7 @@ export class SurveyQuestionLikertScale extends SurveyQuestionElementBase {
 
       const likert_element = (id) => { 
          return (
-            <LikertScaleButton id={id} onClick={handleSelect} isSelected={id == this.question.value} />
+            <LikertScaleButton id={id} onClick={handleSelect} isSelected={id === this.question.value} />
          );
       };
       const likert_buttons = [];

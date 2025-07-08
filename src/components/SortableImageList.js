@@ -1,9 +1,16 @@
 import { useState } from "react"
 import { ReactSortable } from "react-sortablejs";
+import { FullScreenImageButton } from "./FullScreenImageButton";
 
 export const SortableImageList = ({ images, onChange }) => {
+   const initialHoverState = {};
+   images.forEach(img => {
+      initialHoverState[img.id] = false;
+   });
+
    const [imageList, setImageList] = useState(images);
    const [draggedItemId, setDraggedItemId] = useState(null);
+   const [isHover, setIsHover] = useState(initialHoverState);
 
    const handleChange = (order) => {
       setImageList(order);
@@ -20,6 +27,20 @@ export const SortableImageList = ({ images, onChange }) => {
    const handleEnd = () => {
       setDraggedItemId(null);
    };
+
+   // hover functions
+   const handleMouseEnter = (id) => {
+      setIsHover(prev => ({
+         ...prev,
+         [id]: true
+      }));
+   }
+   const handleMouseLeave = (id) => {
+      setIsHover(prev => ({
+         ...prev,
+         [id]: false
+      }));
+   }
 
    return (
       <div style={{ width: "100%", margin: "0" }}>
@@ -62,15 +83,20 @@ export const SortableImageList = ({ images, onChange }) => {
 
                const imageContainerStyle = {
                   flex: 1,
-                  maxWidth: "200px",
+                  maxWidth: "170px",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
+                  position: "relative"
                };
                
                return (
                   <div key={elem.id} style={itemStyle}>
                      <div style={numberStyle}>{idx + 1}</div>
-                     <div style={imageContainerStyle}>
+                     <div 
+                        style={imageContainerStyle}
+                        onMouseEnter={() => handleMouseEnter(elem.id)}
+                        onMouseLeave={() => handleMouseLeave(elem.id)}
+                     >
                         <img 
                            src={`${process.env.PUBLIC_URL}/${elem.url}`} 
                            alt={`img-${idx}`} 
@@ -80,6 +106,10 @@ export const SortableImageList = ({ images, onChange }) => {
                               borderRadius: "8px",
                               display: "block",
                            }} 
+                        />
+                        <FullScreenImageButton 
+                           imageUrl={elem.url}
+                           isVisible={isHover[elem.id]}
                         />
                      </div>
                   </div>

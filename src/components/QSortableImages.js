@@ -6,21 +6,21 @@ import { SortableImageList } from "./SortableImageList";
 // Custom question type SortableImages
 // shows a list of images the user can rearrange to change their order
 
-const SORTABLE_IMAGE_COMPONENT = "sortable-images";
+const SORTABLE_IMAGES_COMPONENT = "sortable-images";
 
 export class QuestionSortableImagesModel extends Question {
    getType() {
-      return SORTABLE_IMAGE_COMPONENT;
+      return SORTABLE_IMAGES_COMPONENT;
    }
    
    // define custom attributes this question supports
 
    // choices: a list of image URLs, the order determines the user's decision
-   get choices() {
-      return this.getPropertyValue("choices");
+   get images() {
+      return this.getPropertyValue("images");
    }
-   set choices(val) {
-      this.setPropertyValue("choices", val);
+   set images(val) {
+      this.setPropertyValue("images", val);
    }
 
    // attribute: defines the axis labels for sorting (start and end values)
@@ -34,7 +34,7 @@ export class QuestionSortableImagesModel extends Question {
 
 export function registerSortableImages() {
    ElementFactory.Instance.registerElement(
-      SORTABLE_IMAGE_COMPONENT,
+      SORTABLE_IMAGES_COMPONENT,
       (name) => {
          return new QuestionSortableImagesModel(name);
       }
@@ -42,9 +42,9 @@ export function registerSortableImages() {
 }
 
 Serializer.addClass(
-   SORTABLE_IMAGE_COMPONENT,
+   SORTABLE_IMAGES_COMPONENT,
    [{
-      name: "choices",
+      name: "images",
       category: "general",
       visibleIndex: 2
    }, {
@@ -72,16 +72,16 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
    get value() {
       return this.question.value;
    }
-   get choices() {
-      return this.question.choices;
+   get images() {
+      return this.question.images;
    }
    get attribute() {
       return this.question.attribute;
    }
 
-   renderSortbaleImages(choices, attribute) {
+   renderSortbaleImages(images, attribute) {
       const image_urls = [];
-      choices.forEach(elem => {
+      images.forEach(elem => {
          image_urls.push(elem.url);
       });
 
@@ -127,7 +127,7 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
                </div>
                <div>
                   <SortableImageList
-                     images={choices}
+                     images={images}
                      onChange={handleImageOrderChange}
                   />
                </div>
@@ -139,14 +139,14 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
    renderElement() {
       return (
          <div style={this.style}>
-            {this.renderSortbaleImages(this.choices, this.attribute)}
+            {this.renderSortbaleImages(this.images, this.attribute)}
          </div>
       )
    }
 }
 
 ReactQuestionFactory.Instance.registerQuestion(
-   SORTABLE_IMAGE_COMPONENT, 
+   SORTABLE_IMAGES_COMPONENT, 
    (props) => {
       return createElement(SurveyQuestionSortableImages, props);
    }

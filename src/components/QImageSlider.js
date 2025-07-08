@@ -107,6 +107,10 @@ export class SurveyQuestionImageSlider extends SurveyQuestionElementBase {
                height: "200px",
                marginBottom: "20px"
             }}>
+               <div style={{
+                  ...img_style,
+                  backgroundColor: "#000"
+               }}></div>
                <img 
                   src={`${process.env.PUBLIC_URL}/${img_url_0}`} 
                   style={{
