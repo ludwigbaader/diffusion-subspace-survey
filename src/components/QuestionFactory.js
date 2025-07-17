@@ -73,13 +73,19 @@ export async function createAttributeRankingQuestions(userId) {
       const attribute_info = await load_attribute_file(base_folder);
       const attributes = attribute_info["attribute"];
 
+      console.log("hi")
+      console.log(attributes);
+
       questions.push({
          type: "sortable-images",
          name: `SortImgsAttribute_${i}`,
          title: "Sort the images according to the specified attributes",
          description: `Position images that look more "${attributes[0]}" to you at the top and images you consider to be more "${attributes[1]}" at the bottom`,
          images: imgs,
-         attribute: attributes
+         attribute: {
+            start: attributes[0],
+            end: attributes[1],
+         }
       });
    } 
 
@@ -103,8 +109,10 @@ export async function createAttributeChangeQuestions(userId) {
          if (attribute_axis[(user_offset + i) % 5] == 1) {
             j += 8;
          }
-         imgs.push(base_folder + `image_${j.toString().padStart(2, '0')}`);
+         imgs.push(base_folder + `image_${j.toString().padStart(2, '0')}.jpg`);
       }
+      // invert the order of the list
+      imgs.reverse();
 
       // load the attribute info
       const attribute_info = await load_attribute_file(base_folder);
@@ -120,7 +128,7 @@ export async function createAttributeChangeQuestions(userId) {
          likertQuestionText: "How does the slider affect the image? Does the image change at a consistent rate across the range of the slider or does the rate of change vary?",
          numOfChoices: 7,
          categoryNames: [
-            "Linear rate of change",
+            "Constant rate of change",
             "Varying rate of change"
          ]
       });
@@ -146,8 +154,9 @@ export async function createAttributePrecisionQuestions(userId) {
          if (attribute_axis[(user_offset + i) % 5] == 1) {
             j += 8;
          }
-         imgs.push(base_folder + `image_${j.toString().padStart(2, '0')}`);
+         imgs.push(base_folder + `image_${j.toString().padStart(2, '0')}.jpg`);
       }
+      imgs.reverse();
 
       // load the attribute info
       const attribute_info = await load_attribute_file(base_folder);
@@ -163,8 +172,8 @@ export async function createAttributePrecisionQuestions(userId) {
          likertQuestionText: "Does the slider change the described attribute in the image?",
          numOfChoices: 7,
          categoryNames: [
-            "Image change matches the attribute",
-            "Image change does not match the attribute"
+            "Image change does not match the attribute",
+            "Image change matches the attribute"
          ]
       });
    }
@@ -184,7 +193,7 @@ export async function createSubspacePositionQuestions(userId) {
       const reference_img = base_folder + "image_reference.jpg";
 
       // load subject image
-      const subject_img = base_folder + `${((user_offset + i) % 5).toString().padStart(3, '0')}/image_subject.jpg`;
+      const subject_img = base_folder + `${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/image_subject.jpg`;
 
       // load attributes
       const attribute_info = await load_attribute_file(base_folder);
@@ -195,7 +204,7 @@ export async function createSubspacePositionQuestions(userId) {
          name: `SubspacePosition_${i}`,
          title: "Select the position you would place the image at in the grid",
          description: "The grid defines a 2-dimensional image space in which the attribute associated with each direction changes in the reference image (which sits at the center of the grid). Select the position at which you think the subject image should be",
-         position: [0.0, 0.0],
+         position: [0.5, 0.5],
          image: subject_img,
          referenceImage: reference_img,
          axisLabels: attribute_info["attribute"]

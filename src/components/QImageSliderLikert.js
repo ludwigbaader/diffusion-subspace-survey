@@ -179,19 +179,19 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
             }}>
                <div style={{
                   position: "relative",
-                  width: "200px",
-                  height: "200px",
+                  width: "300px",
+                  height: "300px",
                   marginBottom: "20px"
                }}>
                   <div style={{
                      ...imgStyle,
-                     backgroundColor: "#000"
+                     backgroundColor: "#fff"
                   }}></div>
                   <img
                      src={`${process.env.PUBLIC_URL}/${imgURL_0}`}
                      style={{
                         ...imgStyle,
-                        opacity: (1 - interpolationFac) * 100 + "%",
+                        //opacity: (1 - interpolationFac),
                      }}
                      alt="subspace-attribute-0"
                   />
@@ -199,7 +199,8 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
                      src={`${process.env.PUBLIC_URL}/${imgURL_1}`}
                      style={{
                         ...imgStyle,
-                        opacity: interpolationFac * 100 + "%",
+                        opacity: interpolationFac,
+                        mixBlendMode: "normal"
                      }}
                      alt="subspace-attribute-1"
                   />

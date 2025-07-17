@@ -5,7 +5,6 @@ export const CustomImage = ({ path, width, customStyle = {} }) => {
    const [isHover, setIsHover] = useState(false);
 
    const handleMouseEnter = () => {
-      console.log("mouse entered")
       setIsHover(true);
    }
    const handleMouseLeave = () => {

@@ -45,7 +45,8 @@ const surveyTemplate = {
          caption: [
             "The aim of this experiment is to evaluate different methods of creating continuous, semantically meaningful subspaces of the latent space of Diffusion models for AI image generation. The subspaces are designed to capture changes in certain image attributes to give users the ability to interactively modify an image they have generated from an initial prompt. Since perceived changes in image attributes are highly subjective it is crucial to get the feedback of real users on how well the subspaces actually capture the desired attributes.",
             "You will be asked to complete a number of image evaluation tasks such as ordering a list of images according to an attribute, or judging how well a slider influences a specified image attribute in the given examples. The survey records your responses to the questions as well as some general performance metrics. No personal or identifiable data is collected and the results cannot be linked to individual participants. The data collected will be used exclusively for scientific research purposes.",
-            "Participation is entirely voluntary and you are free to withdraw from the study at any time. However, since no personal or identifying information is collected, it may not be possible to accurately identify and remover your data from the dataset once submitted."
+            "Participation is entirely voluntary and you are free to withdraw from the study at any time. However, since no personal or identifying information is collected, it may not be possible to accurately identify and remover your data from the dataset once submitted.",
+            "Completing the study typically takes about 10 to 15 minutes."
          ]
       }, {
          type: "checkbox",
@@ -127,8 +128,7 @@ async function generateSurveyConfiguration(userID, pageLayout) {
    const attribute_ranking_questions = await createAttributeRankingQuestions(userID);
    const attribute_change_questions = await createAttributeChangeQuestions(userID);
    const attribute_precision_questions = await createAttributePrecisionQuestions(userID);
-   //const subspace_position_questions = await createSubspacePositionQuestions(userID);
-   const subspace_position_questions = [];
+   const subspace_position_questions = await createSubspacePositionQuestions(userID);
 
    // randomize the question order
    shuffleArray(subspace_ranking_questions);
@@ -155,11 +155,11 @@ async function generateSurveyConfiguration(userID, pageLayout) {
    } else {
       // option B - have all questions of one type collected on a single page
       surveyPages.push(...[
-         createStudyPage("page_01", "Questions 1/5", subspace_ranking_questions),
-         createStudyPage("page_02", "Questions 2/5", attribute_ranking_questions),
-         createStudyPage("page_03", "Questions 3/5", attribute_change_questions),
-         createStudyPage("page_04", "Questions 4/5", attribute_precision_questions),
-         createStudyPage("page_05", "Questions 5/5", subspace_position_questions),
+         createStudyPage("page_01", "Questions 1/6", subspace_ranking_questions),
+         createStudyPage("page_03", "Questions 2/6", attribute_precision_questions),
+         createStudyPage("page_02", "Questions 3/6", attribute_ranking_questions),
+         createStudyPage("page_04", "Questions 4/6", attribute_change_questions),
+         createStudyPage("page_05", "Questions 5/6", subspace_position_questions),
       ]);
    }
 

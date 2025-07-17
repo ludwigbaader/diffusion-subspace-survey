@@ -103,12 +103,13 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
       }
 
       return (
-         <div style={{ display: "flex", justifyContent: "center" }}>
+         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <div style={{
                display: "flex",
                position: "relative",
                justifyContent: "space-evenly",
-               width: "100%"
+               width: "100%",
+               marginBottom: "20px"
             }}>
                <div style={{
                   display: "flex",
@@ -129,6 +130,27 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
                      <br/>Reference Image:
                   </div>
                   <CustomImage path={referenceImage} width={"170px"} />
+               </div>
+            </div>
+            <div style={{
+               display: "flex",
+               color: "#999",
+               fontSize: "small",
+               textWrap: "wrap",
+               textAlign: "left",
+               marginLeft: "52px",
+               marginRight: "52px"
+            }}>
+               <div>
+                  <img src={`${process.env.PUBLIC_URL}/info_icon.svg`} style={{
+                     width: "15px",
+                     marginRight: "10px",
+                     marginTop: "3px",
+                     opacity: 0.8
+                  }} />
+               </div>
+               <div>
+                  You can use the button that appears when hovering over one of the images to show it in full-screen view
                </div>
             </div>
          </div>

@@ -105,17 +105,14 @@ export class SurveyQuestionImageSlider extends SurveyQuestionElementBase {
                position: "relative", 
                width: "200px", 
                height: "200px",
-               marginBottom: "20px"
+               marginBottom: "20px",
+               backgroundColor: "#fff" // White background instead of black
             }}>
-               <div style={{
-                  ...img_style,
-                  backgroundColor: "#000"
-               }}></div>
                <img 
                   src={`${process.env.PUBLIC_URL}/${img_url_0}`} 
                   style={{
                      ...img_style,
-                     opacity: (1 - interpolation_fac) * 100 + "%",
+                     opacity: (1 - interpolation_fac),
                   }} 
                   alt="subspace-attribute-0" 
                />
@@ -123,7 +120,8 @@ export class SurveyQuestionImageSlider extends SurveyQuestionElementBase {
                   src={`${process.env.PUBLIC_URL}/${img_url_1}`} 
                   style={{ 
                      ...img_style,
-                     opacity: interpolation_fac * 100 + "%",
+                     opacity: interpolation_fac,
+                     mixBlendMode: "normal"
                   }} 
                   alt="subspace-attribute-1" 
                />

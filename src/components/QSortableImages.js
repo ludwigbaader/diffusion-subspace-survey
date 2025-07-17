@@ -115,21 +115,44 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
       };
       
       return (
-         <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ display: "flex", position: "relative" }}>
-               <div style={{ position: "absolute", height: "100%", left: "-60px" }}>
-                  {attribute && (
-                     <div style={axisStyle}>
-                        <div style={axisLabelStyle}>{attribute.start}</div>
-                        <div style={axisLabelStyle}>{attribute.end}</div>
-                     </div>
-                  )}
+         <div>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+               <div style={{ display: "flex", position: "relative" }}>
+                  <div style={{ position: "absolute", height: "100%", left: "-60px" }}>
+                     {attribute && (
+                        <div style={axisStyle}>
+                           <div style={axisLabelStyle}>{attribute.start}</div>
+                           <div style={axisLabelStyle}>{attribute.end}</div>
+                        </div>
+                     )}
+                  </div>
+                  <div>
+                     <SortableImageList
+                        images={images}
+                        onChange={handleImageOrderChange}
+                     />
+                  </div>
+               </div>
+            </div>
+            <div style={{
+               display: "flex",
+               color: "#999",
+               fontSize: "small",
+               textWrap: "wrap",
+               textAlign: "left",
+               marginLeft: "52px",
+               marginRight: "52px"
+            }}>
+               <div>
+                  <img src={`${process.env.PUBLIC_URL}/info_icon.svg`} style={{
+                     width: "15px",
+                     marginRight: "10px",
+                     marginTop: "3px",
+                     opacity: 0.8
+                  }} />
                </div>
                <div>
-                  <SortableImageList
-                     images={images}
-                     onChange={handleImageOrderChange}
-                  />
+                  You can use the button that appears when hovering over one of the images to show it in full-screen view
                </div>
             </div>
          </div>
