@@ -44,6 +44,24 @@ export const SortableImageList = ({ images, onChange }) => {
 
    return (
       <div style={{ width: "100%", margin: "0" }}>
+         <style>{`
+            @media (max-width: 768px) {
+               .sortable-item {
+                  touch-action: manipulation !important;
+                  user-select: none !important;
+                  -webkit-user-select: none !important;
+                  -moz-user-select: none !important;
+                  -ms-user-select: none !important;
+               }
+               .sortable-item img {
+                  pointer-events: none !important;
+               }
+               .mobile-always-visible {
+                  display: block !important;
+                  opacity: 1 !important;
+               }
+            }
+         `}</style>
          <ReactSortable 
             tag="div" 
             list={imageList} 
@@ -51,6 +69,11 @@ export const SortableImageList = ({ images, onChange }) => {
             animation={150} 
             onStart={handleStart}
             onEnd={handleEnd}
+            touchStartThreshold={window.innerWidth <= 768 ? 3 : 0}
+            delay={window.innerWidth <= 768 ? 200 : 0}
+            delayOnTouchStart={window.innerWidth <= 768}
+            forceFallback={false}
+            fallbackOnBody={true}
             style={{ display: "flex", flexDirection: "column", gap: "10px"}}
          >
             {imageList.map((elem, idx) => {
@@ -89,8 +112,10 @@ export const SortableImageList = ({ images, onChange }) => {
                   position: "relative"
                };
                
+               const isMobile = window.innerWidth <= 768;
+               
                return (
-                  <div key={elem.id} style={itemStyle}>
+                  <div key={elem.id} className="sortable-item" style={itemStyle}>
                      <div style={numberStyle}>{idx + 1}</div>
                      <div 
                         style={imageContainerStyle}
@@ -109,7 +134,8 @@ export const SortableImageList = ({ images, onChange }) => {
                         />
                         <FullScreenImageButton 
                            imageUrl={elem.url}
-                           isVisible={isHover[elem.id]}
+                           isVisible={isMobile || isHover[elem.id]}
+                           className="mobile-always-visible"
                         />
                      </div>
                   </div>

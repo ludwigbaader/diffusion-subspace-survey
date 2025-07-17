@@ -102,20 +102,54 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
          textAlign: "left"
       }
 
+      const mobileStyles = `
+         @media (max-width: 768px) {
+            .sortable-images-container {
+               flex-direction: column-reverse !important;
+               gap: 20px !important;
+            }
+            .sortable-images-section {
+               align-items: center !important;
+               text-align: center !important;
+            }
+            .reference-image-section {
+               align-items: center !important;
+               text-align: center !important;
+               display: flex !important;
+               flex-direction: column !important;
+            }
+            .sortable-images-section .heading-style {
+               text-align: center !important;
+               max-width: none !important;
+            }
+            .reference-image-section .heading-style {
+               text-align: center !important;
+               max-width: none !important;
+            }
+         }
+      `;
+
       return (
          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <div style={{
-               display: "flex",
-               position: "relative",
-               justifyContent: "space-evenly",
-               width: "100%",
-               marginBottom: "20px"
-            }}>
-               <div style={{
+            <style>{mobileStyles}</style>
+            <div 
+               className="sortable-images-container"
+               style={{
                   display: "flex",
-                  flexDirection: "column",
-               }}>
-                  <div style={headingStyle}>
+                  position: "relative",
+                  justifyContent: "space-evenly",
+                  width: "100%",
+                  marginBottom: "20px"
+               }}
+            >
+               <div 
+                  className="sortable-images-section"
+                  style={{
+                     display: "flex",
+                     flexDirection: "column",
+                  }}
+               >
+                  <div className="heading-style" style={headingStyle}>
                      Images emphasizing the attribute "{attribute}":
                   </div>
                   <div>
@@ -125,8 +159,8 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
                      />
                   </div>
                </div>
-               <div>
-                  <div style={headingStyle}>
+               <div className="reference-image-section">
+                  <div className="heading-style" style={headingStyle}>
                      <br/>Reference Image:
                   </div>
                   <CustomImage path={referenceImage} width={"170px"} />

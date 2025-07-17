@@ -89,25 +89,51 @@ export class SurveyQuestionLikertScale extends SurveyQuestionElementBase {
       const categoryStyle = {
          width: "15%",
          whiteSpace: "normal",
-         overflowWrap: "break-word"
+         overflowWrap: "break-word",
+         fontWeight: "bold"
       }
 
+      const mobileStyles = `
+         @media (max-width: 768px) {
+            .likert-scale-container {
+               flex-direction: column !important;
+               gap: 15px !important;
+            }
+            .likert-scale-category {
+               width: 100% !important;
+               text-align: center !important;
+               font-weight: bold !important;
+            }
+            .likert-scale-buttons {
+               flex-direction: column !important;
+               align-items: center !important;
+               gap: 8px !important;
+            }
+         }
+      `;
+
       return (
-         <div style={{ 
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            color: "#000",
-            fontSize: "small"
-         }}>
-            <div style={categoryStyle}>
-               {this.categoryNames[0]}
-            </div>
-            <div style={{ display: "flex" }}>
-               {likert_buttons}
-            </div>
-            <div style={categoryStyle}>
-               {this.categoryNames[1]}
+         <div>
+            <style>{mobileStyles}</style>
+            <div 
+               className="likert-scale-container"
+               style={{ 
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  color: "#000",
+                  fontSize: "small"
+               }}
+            >
+               <div className="likert-scale-category" style={categoryStyle}>
+                  {this.categoryNames[0]}
+               </div>
+               <div className="likert-scale-buttons" style={{ display: "flex" }}>
+                  {likert_buttons}
+               </div>
+               <div className="likert-scale-category" style={categoryStyle}>
+                  {this.categoryNames[1]}
+               </div>
             </div>
          </div>
       );

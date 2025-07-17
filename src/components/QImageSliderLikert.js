@@ -165,11 +165,32 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
       const likertCategoryStyle = {
          width: "15%",
          whiteSpace: "normal",
-         overflowWrap: "break-word"
+         overflowWrap: "break-word",
+         fontWeight: "bold"
       }
+
+      const mobileStyles = `
+         @media (max-width: 768px) {
+            .image-slider-likert-container {
+               flex-direction: column !important;
+               gap: 15px !important;
+            }
+            .image-slider-likert-category {
+               width: 100% !important;
+               text-align: center !important;
+               font-weight: bold !important;
+            }
+            .image-slider-likert-buttons {
+               flex-direction: column !important;
+               align-items: center !important;
+               gap: 8px !important;
+            }
+         }
+      `;
       
       return (
          <div>
+            <style>{mobileStyles}</style>
             <div style={{
                display: "flex",
                flexDirection: "column",
@@ -238,20 +259,23 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
                }}>
                   {likertQuestionText}
                </div>
-               <div style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  color: "#000",
-                  fontSize: "small"
-               }}>
-                  <div style={likertCategoryStyle}>
+               <div 
+                  className="image-slider-likert-container"
+                  style={{
+                     display: "flex",
+                     justifyContent: "space-between",
+                     alignItems: "center",
+                     color: "#000",
+                     fontSize: "small"
+                  }}
+               >
+                  <div className="image-slider-likert-category" style={likertCategoryStyle}>
                      {categoryNames[0]}
                   </div>
-                  <div style={{ display: "flex" }}>
+                  <div className="image-slider-likert-buttons" style={{ display: "flex" }}>
                      {likert_buttons}
                   </div>
-                  <div style={likertCategoryStyle}>
+                  <div className="image-slider-likert-category" style={likertCategoryStyle}>
                      {categoryNames[1]}
                   </div>
                </div>

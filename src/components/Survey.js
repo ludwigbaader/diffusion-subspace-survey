@@ -46,7 +46,8 @@ const surveyTemplate = {
             "The aim of this experiment is to evaluate different methods of creating continuous, semantically meaningful subspaces of the latent space of Diffusion models for AI image generation. The subspaces are designed to capture changes in certain image attributes to give users the ability to interactively modify an image they have generated from an initial prompt. Since perceived changes in image attributes are highly subjective it is crucial to get the feedback of real users on how well the subspaces actually capture the desired attributes.",
             "You will be asked to complete a number of image evaluation tasks such as ordering a list of images according to an attribute, or judging how well a slider influences a specified image attribute in the given examples. The survey records your responses to the questions as well as some general performance metrics. No personal or identifiable data is collected and the results cannot be linked to individual participants. The data collected will be used exclusively for scientific research purposes.",
             "Participation is entirely voluntary and you are free to withdraw from the study at any time. However, since no personal or identifying information is collected, it may not be possible to accurately identify and remover your data from the dataset once submitted.",
-            "Completing the study typically takes about 10 to 15 minutes."
+            "Completing the study typically takes about 10 to 15 minutes.",
+            "Warning: It is recommended to use a laptop or desktop computer for completing this survey. Some of the questions might only work in a limited manner on mobile devices."
          ]
       }, {
          type: "checkbox",
@@ -222,9 +223,39 @@ export default function SurveyComponent() {
 
    // send the survey results to the google sheets endpoint
    const postSurveyData = useCallback(survey => {
-      survey.setValue("userId", userId);
+      const currentTime = Date.now();
+      const currentPage = survey.currentPage;
+      const pageName = currentPage ? currentPage.name : 'unknown';
+      
+      // Handle page timing using localStorage
+      const previousPageStart = localStorage.getItem('pageStartTime');
+      const previousPageName = localStorage.getItem('currentPageName');
+      
+      // If we have a previous page timing, calculate and store it
+      if (previousPageStart && previousPageName) {
+         const timeSpent = currentTime - parseInt(previousPageStart);
+         const existingTimings = JSON.parse(localStorage.getItem('pageTimings') || '[]');
+         existingTimings.push({
+            pageName: previousPageName,
+            timeSpent: timeSpent,
+            timestamp: new Date().toISOString()
+         });
+         localStorage.setItem('pageTimings', JSON.stringify(existingTimings));
+      }
+      
+      // Set up timing for the current page
+      localStorage.setItem('pageStartTime', currentTime.toString());
+      localStorage.setItem('currentPageName', pageName);
 
-      console.log(survey.data);
+      survey.setValue("userId", userId);
+      survey.setValue("fullScreenCounter", localStorage.getItem("fullScreenCounter") || "0");
+      
+      // Include page timings in survey data
+      const pageTimings = JSON.parse(localStorage.getItem('pageTimings') || '[]');
+      survey.setValue("pageTimings", pageTimings);
+
+      console.log('Survey data:', survey.data);
+      console.log('Current page timings:', pageTimings);
       
       if (Object.keys(survey.data).length > 1) {
          saveSurveyResults(
@@ -233,6 +264,35 @@ export default function SurveyComponent() {
          );
       }
    }, [userId]);
+
+   // Handle survey completion - capture final page timing
+   const onSurveyComplete = useCallback(survey => {
+      const currentTime = Date.now();
+      const previousPageStart = localStorage.getItem('pageStartTime');
+      const previousPageName = localStorage.getItem('currentPageName');
+      
+      // Add final page timing
+      if (previousPageStart && previousPageName) {
+         const timeSpent = currentTime - parseInt(previousPageStart);
+         const existingTimings = JSON.parse(localStorage.getItem('pageTimings') || '[]');
+         existingTimings.push({
+            pageName: previousPageName,
+            timeSpent: timeSpent,
+            timestamp: new Date().toISOString()
+         });
+         
+         survey.setValue("pageTimings", existingTimings);
+         console.log('Final page timings:', existingTimings);
+      }
+      
+      // Call the regular postSurveyData function
+      postSurveyData(survey);
+      
+      // Clean up localStorage after survey completion
+      localStorage.removeItem('pageStartTime');
+      localStorage.removeItem('currentPageName');
+      localStorage.removeItem('pageTimings');
+   }, [postSurveyData]);
 
    // Show loading state while survey is being generated
    if (!surveyJson) {
@@ -243,8 +303,15 @@ export default function SurveyComponent() {
    survey.applyTheme(DefaultLight);
    // survey.applyTheme(DefaultLightPanelless);
    
+   // Initialize page timing if not already set
+   if (!localStorage.getItem('pageStartTime')) {
+      localStorage.setItem('pageStartTime', Date.now().toString());
+      localStorage.setItem('currentPageName', 'Introduction');
+      localStorage.setItem('pageTimings', '[]');
+   }
+   
    survey.onCurrentPageChanged.add(postSurveyData);
-   survey.onComplete.add(postSurveyData);
+   survey.onComplete.add(onSurveyComplete);
 
    return <Survey model={survey}/>;
 }

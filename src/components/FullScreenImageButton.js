@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 export const FullScreenImageButton = ({ 
-   imageUrl, 
+   imageUrl,
    isVisible = true, 
    opacity = 0.75,
    buttonSize = 30,
@@ -16,6 +16,14 @@ export const FullScreenImageButton = ({
 
    const openModal = () => {
       setModalIsOpen(true);
+
+      // update full screen counter
+      const fullScreenCounter = localStorage.getItem("fullScreenCounter");
+      if (!fullScreenCounter) {
+         localStorage.setItem("fullScreenCounter", 1);
+      } else {
+         localStorage.setItem("fullScreenCounter", Number(fullScreenCounter) + 1);
+      }
    };
 
    const closeModal = () => {

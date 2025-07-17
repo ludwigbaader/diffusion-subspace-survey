@@ -116,9 +116,28 @@ export class SurveyQuestionImagePositioner extends SurveyQuestionElementBase {
          marginBottom: "7px",
       }
 
+      const mobileStyles = `
+         @media (max-width: 768px) {
+            .image-positioner-container {
+               flex-direction: column !important;
+               gap: 20px !important;
+            }
+            .image-positioner-images {
+               align-items: center !important;
+            }
+            .image-positioner-images > div {
+               text-align: center !important;
+            }
+         }
+      `;
+
       return (
          <div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <style>{mobileStyles}</style>
+            <div 
+               className="image-positioner-container"
+               style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+            >
                <div>
                   <GridSelector2D
                      position={position}
@@ -127,10 +146,13 @@ export class SurveyQuestionImagePositioner extends SurveyQuestionElementBase {
                      size={[250, 250]}
                   />
                </div>
-               <div style={{
-                  display: "flex",
-                  flexDirection: "column"
-               }}>
+               <div 
+                  className="image-positioner-images"
+                  style={{
+                     display: "flex",
+                     flexDirection: "column"
+                  }}
+               >
                   <div style={{ marginBottom: "10px" }}>
                      <div style={textStyle}>Reference image</div>
                      <CustomImage
