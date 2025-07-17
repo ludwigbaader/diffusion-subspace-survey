@@ -221,6 +221,9 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
                   <Slider
                      value={sliderPosition}
                      onChange={handleSliderPositionChange}
+                     sx={{
+                        color: "#19b394"
+                     }}
                   />
                </div>
             </div>

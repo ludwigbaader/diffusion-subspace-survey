@@ -7,7 +7,6 @@ const DESC_TEXT_COMPONENT = "descriptive-text"
 export class QuestionDescriptiveTextModel extends QuestionNonValue {
    constructor() {
       super();
-      this.createLocalizableString("caption", this);
    }
 
    getType() {
@@ -31,15 +30,10 @@ export class QuestionDescriptiveTextModel extends QuestionNonValue {
 
    // caption: the actual contents of the text field
    get caption() {
-      return this.getLocalizableStringText("caption");
+      return this.getPropertyValue("caption");
    }
    set caption(val) {
-      this.setLocalizableStringText("caption", val);
-   }
-
-   // LocalizationString object for the caption property
-   get locCaption() {
-      return this.getLocalizableString("caption");
+      this.setPropertyValue("caption", val);
    }
 }
 
@@ -58,9 +52,8 @@ Serializer.addClass(
       name: "heading",
       category: "general"
    }, {
-      name: "caption:text",
-      category: "general",
-      serializationProperty: "locCaption"
+      name: "caption",
+      category: "general"
    }, {
       name: "textSize",
       category: "general",
@@ -83,12 +76,24 @@ export class SurveyQuestionDescriptiveText extends SurveyQuestionElementBase {
    }
    renderElement() {
       const textSize = this.question.textSize || "medium";
-      const locStr = SurveyElementBase.renderLocString(this.question.locCaption);
       
       return (
-         <div style={{ color: "#000", fontSize: textSize }}>
-            <div style={{ fontWeight: "bold" }}>{this.question.heading}</div>
-            <div>{locStr}</div>
+         <div style={{ color: "#000" }}>
+            <div style={{ 
+               fontSize: "large",
+               fontWeight: "bold",
+               marginBottom: "15px",
+               textAlign: "left"
+            }}>{this.question.heading}</div>
+            {this.question.caption.map((text, index) => (
+               <div style={{
+                  fontSize: textSize,
+                  textAlign: "left",
+                  lineHeight: 1.6,
+                  textWrap: "wrap",
+                  marginBottom: "15px"
+               }}>{text}</div>
+            ))}
          </div>
       );
    }

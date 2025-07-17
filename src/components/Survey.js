@@ -1,7 +1,7 @@
 import 'survey-core/survey-core.css';
 import { Model, Survey } from 'survey-react-ui';
 import { DefaultLight, DefaultLightPanelless } from "survey-core/themes";
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { registerSortableImages } from './QSortableImages';
 import { registerImageSlider } from './QImageSlider';
 import { registerImagePositioner } from './QImagePositioner';
@@ -9,6 +9,16 @@ import { registerDescriptiveText } from './QDescriptiveText';
 import { registerLikertScale } from './QLikertScale';
 import { registerSortableImagesReference } from './QSortableImagesReference';
 import { registerImageSliderLikert } from './QImageSliderLikert';
+import {
+   createSubspaceRankingQuestions,
+   createAttributeRankingQuestions,
+   createAttributeChangeQuestions,
+   createAttributePrecisionQuestions,
+   createSubspacePositionQuestions,
+   createStudyPage,
+   shuffleArray
+} from './QuestionFactory';
+//import attribute_names from 'public/sampled_images/attribute_names.json';
 
 
 // register custom question components
@@ -22,21 +32,29 @@ registerLikertScale();
 
 
 // json definition of the survey
-const surveyJson = {
+const surveyTemplate = {
    title: "Subspaces for AI Image Generation Models",
    pages: [{
       name: "Introduction",
-      title: "Controllability of AI Image Generation",
+      title: "Welcome to this study!",
       elements: [{
          type: "descriptive-text",
          name: "IntroductionText",
-         textSize: "large",
-         heading: "Welcome to this survey!",
-         caption: "test schmest"
+         textSize: "medium",
+         heading: "Study Information",
+         caption: [
+            "The aim of this experiment is to evaluate different methods of creating continuous, semantically meaningful subspaces of the latent space of Diffusion models for AI image generation. The subspaces are designed to capture changes in certain image attributes to give users the ability to interactively modify an image they have generated from an initial prompt. Since perceived changes in image attributes are highly subjective it is crucial to get the feedback of real users on how well the subspaces actually capture the desired attributes.",
+            "You will be asked to complete a number of image evaluation tasks such as ordering a list of images according to an attribute, or judging how well a slider influences a specified image attribute in the given examples. The survey records your responses to the questions as well as some general performance metrics. No personal or identifiable data is collected and the results cannot be linked to individual participants. The data collected will be used exclusively for scientific research purposes.",
+            "Participation is entirely voluntary and you are free to withdraw from the study at any time. However, since no personal or identifying information is collected, it may not be possible to accurately identify and remover your data from the dataset once submitted."
+         ]
       }, {
-         type: "boolean",
-         name: "AcceptParticipation",
-         title: "I accept that my data will be used for scientific purposes"
+         type: "checkbox",
+         name: "Consent",
+         title: "Please confirm your consent to participate in the study",
+         isRequired: true,
+         choices: [
+            "I have read and understood the information above, and I voluntarily consent to participate in this study"
+         ]
       }]
    }, {
       name: "DemographicData",
@@ -61,6 +79,7 @@ const surveyJson = {
          type: "likert-scale",
          name: "AiFamiliarity",
          title: "How familiar are you with AI image generation tools?",
+         description: "AI image generation tools include Dall-E in ChatGPT, Imagen in Google Gemini, Midjourney, Adobe Firefly and many more",
          numOfChoices: 7,
          categoryNames: [
             "Never used before",
@@ -88,117 +107,144 @@ const surveyJson = {
          ]
       }]
    }, {
-      name: "Page01",
-      title: "Subspaces",
+      name: "GoodbyePage",
+      title: "Study complete, thank you for participating!",
       elements: [{
-         type: "sortable-images",
-         name: "SortImages",
-         title: "Sort the images according to the specified attributes",
-         description: "Position images that look more \"photorealistic\" to you at the top and images you consider to be more \"stylized\" at the bottom",
-         images: [
-            { url: "/img/image_0000.jpg", id: "01" },
-            { url: "/img/image_0001.jpg", id: "02" },
-            { url: "/img/image_0002.jpg", id: "03" },
-            { url: "/img/image_0003.jpg", id: "04" },
-            { url: "/img/image_0004.jpg", id: "05" },
-         ],
-         attribute: {
-            start: "photorealistic",
-            end: "stylized"
-         }
-      }, {
-         type: "sortable-images-reference",
-         name: "SortImagesReference",
-         title: "Sort the images by how well you think the attribute \"stylized\" is emphasized in them compared to the reference image",
-         description: "Place the image you think emphasizes the attribute the most at the top, the one that emphasizes it the least at the bottom",
-         images: [
-            { url: "/img/image_0000.jpg", id: "01" },
-            { url: "/img/image_0001.jpg", id: "02" },
-            { url: "/img/image_0002.jpg", id: "03" },
-            { url: "/img/image_0003.jpg", id: "04" },
-            { url: "/img/image_0004.jpg", id: "05" },
-         ],
-         referenceImage: "/img/image_0000.jpg",
-         attribute: "stylized"
-      }, {
-         type: "image-slider-likert",
-         name: "ImageSliderLikert01",
-         title: "Modify the image with the slider to get a feel for what it does",
-         sliderPosition: 0.0,
-         sourceImages: [
-            "/img/image_0000.jpg",
-            "/img/image_0001.jpg",
-            "/img/image_0002.jpg",
-            "/img/image_0003.jpg",
-            "/img/image_0004.jpg",
-         ],
-         sliderAttribute: "photorealism",
-         likertQuestionText: "Describe how the slider affects the image. Does the image change linearly across the range of the slider or does the rate of change vary?",
-         numOfChoices: 7,
-         categoryNames: [
-            "Linear rate of change",
-            "Varying rate of change"
-         ]
-      }, {
-         type: "image-slider-likert",
-         name: "ImageSliderLikert02",
-         title: "Modify the image with the slider to get a feel for what it does",
-         sliderPosition: 0.0,
-         sourceImages: [
-            "/img/image_0000.jpg",
-            "/img/image_0001.jpg",
-            "/img/image_0002.jpg",
-            "/img/image_0003.jpg",
-            "/img/image_0004.jpg",
-         ],
-         sliderAttribute: "photorealism",
-         likertQuestionText: "Does the slider change the described attribute in the image?",
-         numOfChoices: 7,
-         categoryNames: [
-            "No",
-            "Yes"
-         ]
-      }, {
-         type: "image-positioner",
-         name: "ImagePositioner01",
-         title: "Select the position you would place the image at in the grid",
-         description: "The grid defines a 2-dimensional image space in which the attribute associated with each direction changes in the reference image (which sits at the center of the grid). Select the position at which you think the subject image should be",
-         position: [0.5, 0.5],
-         image: "/img/image_0004.jpg",
-         referenceImage: "/img/image_0000.jpg",
-         axisLabels: [
-            ["photorealistic", "stylized"],
-            ["warm and colorful", "cold and desaturated"]
-         ]
-      }, {
-         type: "likert-scale",
-         name: "LikertScale01",
-         title: "How much do you agree with the statement blue is the best color?",
-         numOfChoices: 7,
-         categoryNames: [
-            "Not at all",
-            "Absolutely agree"
-         ]
+         type: "text",
+         name: "OptionalMail",
+         title: "If you want to stay informed about the results of the research you can enter your e-mail here",
+         description: "Your e-mail will be stored separately from your study data."
       }]
    }]
 };
 
+async function generateSurveyConfiguration(userID, pageLayout) {
+   // choose which images to use for each question as well as question order
+   // construct the surveyJSON based on that and return it
+   // have all question types as functions ideally that I can pass which images to use as a parameter and that return the correct config json
+
+   const subspace_ranking_questions = await createSubspaceRankingQuestions();
+   const attribute_ranking_questions = await createAttributeRankingQuestions(userID);
+   const attribute_change_questions = await createAttributeChangeQuestions(userID);
+   const attribute_precision_questions = await createAttributePrecisionQuestions(userID);
+   //const subspace_position_questions = await createSubspacePositionQuestions(userID);
+   const subspace_position_questions = [];
+
+   // randomize the question order
+   shuffleArray(subspace_ranking_questions);
+   shuffleArray(attribute_ranking_questions);
+   shuffleArray(attribute_change_questions);
+   shuffleArray(attribute_precision_questions);
+   shuffleArray(subspace_position_questions);
+
+   const surveyPages = [];
+   
+   if (pageLayout == 0) {
+      // option A - have one type of each question per page
+      for (let i = 0; i < 5; i++) {
+         surveyPages.push(
+            createStudyPage(`page_${(i + 1).toString().padStart(2, '0')}`, `Questions ${i + 1}/5`, [
+               subspace_ranking_questions[i],
+               attribute_ranking_questions[i],
+               attribute_change_questions[i],
+               attribute_precision_questions[i],
+               subspace_position_questions[i]
+            ])
+         );
+      }
+   } else {
+      // option B - have all questions of one type collected on a single page
+      surveyPages.push(...[
+         createStudyPage("page_01", "Questions 1/5", subspace_ranking_questions),
+         createStudyPage("page_02", "Questions 2/5", attribute_ranking_questions),
+         createStudyPage("page_03", "Questions 3/5", attribute_change_questions),
+         createStudyPage("page_04", "Questions 4/5", attribute_precision_questions),
+         createStudyPage("page_05", "Questions 5/5", subspace_position_questions),
+      ]);
+   }
+
+   console.log(surveyPages);
+
+   // integrate new pages into the study template
+   const surveyJson = surveyTemplate;
+
+   for (const [i, page] of surveyPages.entries()) {
+      surveyJson.pages.splice(2 + i, 0, page);
+   }
+
+   console.log(surveyJson);
+
+   return surveyJson;
+}
+
 export default function SurveyComponent() {
+   const [userId, setUserId] = useState(null);
+   const [surveyJson, setSurveyJson] = useState(null);
+
+   // get a unique user id for each user
+   useEffect(() => {
+      // if no userid is defined yet, fetch the current counter from google sheets
+      async function fetchUserId() {
+         const storedId = localStorage.getItem("userid");
+         if (storedId) {
+            setUserId(storedId);
+         } else {
+            try {
+               const res = await fetch("https://script.google.com/macros/s/AKfycbzLrYE5ZHO5MigPJp6U1aiSWP5IzI5V58G75iZCUJBA5btRyzs0nfYqbcsaQYhJbffb/exec");
+               const data = await res.json();
+               localStorage.setItem("userid", data.userId);
+               setUserId(data.userID);
+            } catch (err) {
+               console.error("Failed to fetch user ID", err);
+               // use random userid as backup
+               const id = Math.floor(Math.random() * 100000);
+               setUserId(id);
+            }
+         }
+      }
+      fetchUserId();
+   }, []);
+
+   // create survey when userId is available
+   useEffect(() => {
+      if (userId && !surveyJson) {
+         async function createSurvey() {
+            try {
+               const newSurvey = await generateSurveyConfiguration(userId, 1);
+               setSurveyJson(newSurvey);
+            } catch (error) {
+               console.error("Failed to generate survey configuration", error);
+            }
+         }
+         createSurvey();
+      }
+   }, [userId, surveyJson]);
+
+   // send the survey results to the google sheets endpoint
+   const postSurveyData = useCallback(survey => {
+      survey.setValue("userId", userId);
+
+      console.log(survey.data);
+      
+      if (Object.keys(survey.data).length > 1) {
+         saveSurveyResults(
+            "https://script.google.com/macros/s/AKfycbwglW6j-GxyEho7xcoy5FTJYTbdsqw1nGOP5qAXuf_wYprUkVfIq985M8zVZ73d_XDF/exec",
+            survey.data
+         );
+      }
+   }, [userId]);
+
+   // Show loading state while survey is being generated
+   if (!surveyJson) {
+      return <div>Loading survey...</div>;
+   }
+
    const survey = new Model(surveyJson);
    survey.applyTheme(DefaultLight);
    // survey.applyTheme(DefaultLightPanelless);
    
-   const surveyComplete = useCallback(survey => {
-      const userId = "";
-      survey.setValue("userId", userId);
-      
-      saveSurveyResults(
-         "https://script.google.com/macros/s/AKfycbwglW6j-GxyEho7xcoy5FTJYTbdsqw1nGOP5qAXuf_wYprUkVfIq985M8zVZ73d_XDF/exec",
-         survey.data
-      );
-   }, []);
-
-   survey.onComplete.add(surveyComplete);
+   survey.onCurrentPageChanged.add(postSurveyData);
+   survey.onComplete.add(postSurveyData);
 
    return <Survey model={survey}/>;
 }
