@@ -3,18 +3,18 @@ export async function createSubspaceRankingQuestions() {
    // public/data/attribute_extremes/xx
 
    const selected_prompts = [
-      "prompt_000",
       "prompt_001",
-      "prompt_007",
-      "prompt_009",
-      "prompt_019",
+      "prompt_003",
+      "prompt_016",
+      "prompt_010",
+      "prompt_012",
    ]
 
    const questions = [];
 
    // load all 5 questions
    for (let i = 1; i <= 5; i++) {
-      const base_folder = `data/attribute_extremes/${selected_prompts[i - 1]}/general_01/`;
+      const base_folder = `data/attribute_extremes/${selected_prompts[i - 1]}/`;
 
       // load the reference image
       const reference_img = base_folder + "image_reference.jpg";
@@ -48,12 +48,14 @@ export async function createSubspaceRankingQuestions() {
 
 export async function createAttributeRankingQuestions(userId) {
    const selected_prompts = [
-      "prompt_000",
       "prompt_001",
       "prompt_003",
-      "prompt_004",
       "prompt_007",
+      "prompt_010",
+      "prompt_012",
    ]
+
+   const attribute_axis = [1, 0, 0, 1, 0];
 
    const questions = [];
 
@@ -63,9 +65,8 @@ export async function createAttributeRankingQuestions(userId) {
    const user_offset = userId % 5;
 
    for (let i = 1; i <= 5; i++) {
-      const base_folder = `data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/x/`;
-
-      console.log("Base folder: " + base_folder);
+      let base_folder = `data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`;
+      base_folder += attribute_axis[i - 1] == 0 ? 'x/' : 'y/';
 
       // load 5 images spread across the 15 image range
       const imgs = [];
@@ -80,9 +81,6 @@ export async function createAttributeRankingQuestions(userId) {
       // load the attribute info
       const attribute_info = await load_attribute_file(base_folder);
       const attributes = attribute_info["attribute"];
-
-      console.log("hi")
-      console.log(attributes);
 
       questions.push({
          type: "sortable-images",
@@ -102,37 +100,43 @@ export async function createAttributeRankingQuestions(userId) {
 
 export async function createAttributeChangeQuestions(userId) {
    const selected_prompts = [
-      "prompt_000",
       "prompt_001",
-      "prompt_003",
       "prompt_004",
       "prompt_007",
+      "prompt_011",
+      "prompt_016",
    ]
 
    // use this array to define whether to use attribute axis x or y on a per-question basis
-   const attribute_axis = [0, 0, 0, 0, 0];
+   const attribute_axis = [3, 2, 2, 0, 1];
   
    const questions = [];
 
    const user_offset = userId % 5;
 
    for (let i = 1; i <= 5; i++) {
-      const base_folder = `data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/x/`;
+      let base_folder = `data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`;
+      base_folder += attribute_axis[i - 1] < 2 ? 'x/' : 'y/';
 
       // load the images of one attribute - potentially choose 
       const imgs = [];
       for (let j = 0; j < 8; j++) {
-         if (attribute_axis[(user_offset + i) % 5] == 1) {
-            j += 8;
+         let j_abs = j;
+         if ((attribute_axis[i - 1] % 2) == 1) {
+            j_abs += 7;
          }
          imgs.push(base_folder + `image_${j.toString().padStart(2, '0')}.jpg`);
       }
       // invert the order of the list
-      imgs.reverse();
+      if ((attribute_axis[i - 1] % 2 == 0)) {
+         imgs.reverse();
+      }
 
       // load the attribute info
       const attribute_info = await load_attribute_file(base_folder);
       const attributes = attribute_info["attribute"];
+
+      console.log("attribute: " + attributes[attribute_axis[i - 1] % 2])
 
       questions.push({
          type: "image-slider-likert",
@@ -140,7 +144,7 @@ export async function createAttributeChangeQuestions(userId) {
          title: "Modify the image with the slider to get a feel for what it does",
          sliderPosition: 0.0,
          sourceImages: imgs,
-         sliderAttribute: attributes[attribute_axis[(user_offset + i) % 5]],
+         sliderAttribute: attributes[attribute_axis[i - 1] % 2],
          likertQuestionText: "How does the slider affect the image? Does the image change at a consistent rate across the range of the slider or does the rate of change vary?",
          numOfChoices: 7,
          categoryNames: [
@@ -155,11 +159,11 @@ export async function createAttributeChangeQuestions(userId) {
 
 export async function createAttributePrecisionQuestions(userId) {
    const selected_prompts = [
-      "prompt_000",
-      "prompt_001",
+      "prompt_002",
       "prompt_003",
-      "prompt_004",
-      "prompt_007",
+      "prompt_009",
+      "prompt_010",
+      "prompt_015",
    ]
 
    // use this array to define whether to use attribute axis x or y on a per-question basis
@@ -171,20 +175,20 @@ export async function createAttributePrecisionQuestions(userId) {
 
    for (let i = 1; i <= 5; i++) {
       let base_folder = `data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`;
-      base_folder += attribute_axis[(user_offset + i) % 5] < 2 ? 'x/' : 'y/';
+      base_folder += attribute_axis[i - 1] < 2 ? 'x/' : 'y/';
 
       // load the images of one attribute - potentially choose 
       const imgs = [];
       for (let j = 0; j < 8; j++) {
          let j_abs = j;
-         if (attribute_axis[(user_offset + i) % 5] == 1) {
+         if ((attribute_axis[i - 1] % 2) == 1) {
             j_abs += 7;
          }
          imgs.push(base_folder + `image_${j_abs.toString().padStart(2, '0')}.jpg`);
       }
-      imgs.reverse();
-
-      console.log(imgs)
+      if ((attribute_axis[i - 1] % 2 == 0)) {
+         imgs.reverse();
+      }
 
       // load the attribute info
       const attribute_info = await load_attribute_file(base_folder);
@@ -196,7 +200,7 @@ export async function createAttributePrecisionQuestions(userId) {
          title: "Modify the image with the slider to get a feel for what it does",
          sliderPosition: 0.0,
          sourceImages: imgs,
-         sliderAttribute: attributes[attribute_axis[(user_offset + i) % 5] % 2],
+         sliderAttribute: attributes[attribute_axis[i - 1] % 2],
          likertQuestionText: "Does the slider change the described attribute in the image?",
          numOfChoices: 7,
          categoryNames: [
@@ -211,11 +215,11 @@ export async function createAttributePrecisionQuestions(userId) {
 
 export async function createSubspacePositionQuestions(userId) {
    const selected_prompts = [
-      "prompt_000",
-      "prompt_001",
-      "prompt_007",
+      "prompt_002",
+      "prompt_004",
       "prompt_009",
-      "prompt_019",
+      "prompt_011",
+      "prompt_016",
    ]
 
    const questions = [];
@@ -232,7 +236,7 @@ export async function createSubspacePositionQuestions(userId) {
       const subject_img = base_folder + `${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/image_subject.jpg`;
 
       // load attributes
-      const attribute_info = await load_attribute_file(base_folder);
+      const attribute_info = await load_attribute_file(base_folder + `${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`);
       
       // TODO - do i need to note somewhere what the actual position for this question is or can I figure that out myself later?
       questions.push({

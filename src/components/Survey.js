@@ -110,8 +110,17 @@ const surveyTemplate = {
       }]
    }, {
       name: "GoodbyePage",
-      title: "Study complete, thank you for participating!",
+      title: "Study completed!",
       elements: [{
+         type: "descriptive-text",
+         name: "GoodbyeText",
+         textSize: "medium",
+         heading: "Thank you for participating!",
+         caption: [
+            "The goal of this study is to evaluate different methods for creating semantically meaningful subspaces of the latent space of diffusion models for image generation. These subspaces aim to map changes in semantically meaningful image attributes to a two-dimensional grid a user can interact with to modify and control the image generation process beyond the image prompt.",
+            "This research is part of a Master thesis about user interfaces for AI image generation at Ludwig-Maximilian-University Munich and University of Glasgow."
+         ]
+      }, {
          type: "text",
          name: "OptionalMail",
          title: "If you want to stay informed about the results of the research you can enter your e-mail here",
