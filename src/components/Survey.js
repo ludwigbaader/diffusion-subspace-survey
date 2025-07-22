@@ -43,11 +43,11 @@ const surveyTemplate = {
          textSize: "medium",
          heading: "Study Information",
          caption: [
-            "The aim of this experiment is to evaluate different methods of creating continuous, semantically meaningful subspaces of the latent space of Diffusion models for AI image generation. The subspaces are designed to capture changes in certain image attributes to give users the ability to interactively modify an image they have generated from an initial prompt. Since perceived changes in image attributes are highly subjective it is crucial to get the feedback of real users on how well the subspaces actually capture the desired attributes.",
-            "You will be asked to complete a number of image evaluation tasks such as ordering a list of images according to an attribute, or judging how well a slider influences a specified image attribute in the given examples. The survey records your responses to the questions as well as some general performance metrics. No personal or identifiable data is collected and the results cannot be linked to individual participants. The data collected will be used exclusively for scientific research purposes.",
+            "This experiment aims to evaluate different methods of creating continuous, semantically meaningful subspaces within the latent space of diffusion models for AI-generated images. These subspaces are designed to capture changes in specific image attributes, enabling users to interactively modify an image generated from an initial prompt. As perceived changes in image attributes are highly subjective, it is crucial to obtain feedback from real users on how well the subspaces capture the desired attributes.",
+            "You will be asked to complete a number of image evaluation tasks, such as ordering a list of images according to certain attributes or judging the effect of a slider on a specified image attribute in the given examples. The survey will record your responses to the questions, as well as some general performance metrics. No personal or identifiable data will be collected, and the results cannot be linked to individual participants. The data collected will be used exclusively for scientific research purposes.",
             "Participation is entirely voluntary and you are free to withdraw from the study at any time. However, since no personal or identifying information is collected, it may not be possible to accurately identify and remover your data from the dataset once submitted.",
             "Completing the study typically takes about 10 to 15 minutes.",
-            "Warning: It is recommended to use a laptop or desktop computer for completing this survey. Some of the questions might only work in a limited manner on mobile devices."
+            "It is recommended to use a laptop or desktop computer for completing this survey. Some of the questions might only work in a limited manner on mobile devices."
          ]
       }, {
          type: "checkbox",
@@ -126,7 +126,21 @@ const surveyTemplate = {
          title: "If you want to stay informed about the results of the research you can enter your e-mail here",
          description: "Your e-mail will be stored separately from your study data."
       }]
-   }]
+   }],
+   completedHtml: `
+   <div>
+      <p>The study is finished. You can now close this page.<p>
+      <div>
+         <p>Person of contact:</br>
+            <a href="mailto:l.baader@campus.lmu.de">l.baader@campus.lmu.de</a>
+         </p>
+      </div>
+      <div style="margin-top: 400px; margin-bottom: 100px">
+         <img src="${process.env.PUBLIC_URL}/lmu_logo_bw.png" style="height: 70px; margin-right: 20px" />
+         <img src="${process.env.PUBLIC_URL}/UoG_colour.svg" style="height: 70px" />
+      </div>
+   </div>
+   `
 };
 
 async function generateSurveyConfiguration(userID, pageLayout) {
@@ -173,16 +187,12 @@ async function generateSurveyConfiguration(userID, pageLayout) {
       ]);
    }
 
-   console.log(surveyPages);
-
    // integrate new pages into the study template
    const surveyJson = surveyTemplate;
 
    for (const [i, page] of surveyPages.entries()) {
       surveyJson.pages.splice(2 + i, 0, page);
    }
-
-   console.log(surveyJson);
 
    return surveyJson;
 }
@@ -262,9 +272,6 @@ export default function SurveyComponent() {
       // Include page timings in survey data
       const pageTimings = JSON.parse(localStorage.getItem('pageTimings') || '[]');
       survey.setValue("pageTimings", pageTimings);
-
-      console.log('Survey data:', survey.data);
-      console.log('Current page timings:', pageTimings);
       
       if (Object.keys(survey.data).length > 1) {
          saveSurveyResults(
@@ -291,7 +298,6 @@ export default function SurveyComponent() {
          });
          
          survey.setValue("pageTimings", existingTimings);
-         console.log('Final page timings:', existingTimings);
       }
       
       // Call the regular postSurveyData function
@@ -337,10 +343,11 @@ function saveSurveyResults(url, json) {
    .then(response => {
       if (response.ok) {
          // handle success
-         console.log(response);
+         // console.log(response);
+         console.log("Progress saved.")
       } else {
          // handle error
-         console.log(response);
+         // console.log(response);
       }
    })
    .catch(error => {

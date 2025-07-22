@@ -87,8 +87,16 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
 
       const handleImageOrderChange = (newOrder) => {
          // Update the question's value with the new order
-         this.question.value = newOrder;
+         const image_ids = [];
+         images.forEach(img => {
+            const url_split = img.url.split("/");
+            image_ids.push(url_split[url_split.length - 1]);
+         });
+         this.question.value = [image_ids, newOrder];
       };
+
+      // set initial value
+      handleImageOrderChange(null);
 
       const axisStyle = {
          display: "flex",

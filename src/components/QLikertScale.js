@@ -73,7 +73,6 @@ export class SurveyQuestionLikertScale extends SurveyQuestionElementBase {
    renderElement() {
       const handleSelect = (id) => {
          this.question.value = Number(id);
-         console.log("Updated the question value: " + id);
       }
 
       const likert_element = (id) => { 

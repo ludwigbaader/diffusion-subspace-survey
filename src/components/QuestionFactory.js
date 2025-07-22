@@ -27,6 +27,7 @@ export async function createSubspaceRankingQuestions() {
             url: base_folder + `image_subspace_${j.toString().padStart(2, '0')}.jpg`
          });
       }
+      shuffleArray(imgs);
 
       // load the attribute info
       const attribute_info = await load_attribute_file(base_folder);
@@ -136,8 +137,6 @@ export async function createAttributeChangeQuestions(userId) {
       const attribute_info = await load_attribute_file(base_folder);
       const attributes = attribute_info["attribute"];
 
-      console.log("attribute: " + attributes[attribute_axis[i - 1] % 2])
-
       questions.push({
          type: "image-slider-likert",
          name: `AttributeChange_${i}`,
@@ -243,7 +242,7 @@ export async function createSubspacePositionQuestions(userId) {
          type: "image-positioner",
          name: `SubspacePosition_${i}`,
          title: "Select the position you would place the image at in the grid",
-         description: "The grid defines a 2-dimensional image space in which the attribute associated with each direction changes in the reference image (which sits at the center of the grid). Select the position at which you think the subject image should be",
+         description: "The grid defines a two-dimensional image space in which each axis represents an image attribute. The reference image is positioned at the centre of the grid. Select the position at which you think the subject image should appear.",
          position: [0.5, 0.5],
          image: subject_img,
          referenceImage: reference_img,

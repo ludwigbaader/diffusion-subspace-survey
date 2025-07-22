@@ -139,7 +139,6 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
       // likert scale logic
       const handleSelect = (id) => {
          this.question.value = Number(id);
-         console.log("Updated the question value: " + id);
       }
 
       const likert_element = (id) => { 

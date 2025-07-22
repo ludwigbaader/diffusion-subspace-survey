@@ -89,8 +89,16 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
 
    renderSortableImagesReference(images, referenceImage, attribute) {
       const handleImageOrderChange = (newOrder) => {
-         this.question.value = newOrder;
+         const image_ids = [];
+         images.forEach(img => {
+            const url_split = img.url.split("/");
+            image_ids.push(url_split[url_split.length - 1]);
+         });
+         this.question.value = [image_ids, newOrder];
       }
+
+      // set the initial value
+      handleImageOrderChange(null);
 
       const headingStyle = {
          color: "#000",
