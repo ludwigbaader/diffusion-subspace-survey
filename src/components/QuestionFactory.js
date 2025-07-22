@@ -14,7 +14,7 @@ export async function createSubspaceRankingQuestions() {
 
    // load all 5 questions
    for (let i = 1; i <= 5; i++) {
-      const base_folder = `data/attribute_extremes/${selected_prompts[i - 1]}/`;
+      const base_folder = `${process.env.PUBLIC_URL}/data/attribute_extremes/${selected_prompts[i - 1]}/`;
 
       // load the reference image
       const reference_img = base_folder + "image_reference.jpg";
@@ -66,7 +66,7 @@ export async function createAttributeRankingQuestions(userId) {
    const user_offset = userId % 5;
 
    for (let i = 1; i <= 5; i++) {
-      let base_folder = `data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`;
+      let base_folder = `${process.env.PUBLIC_URL}/data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`;
       base_folder += attribute_axis[i - 1] == 0 ? 'x/' : 'y/';
 
       // load 5 images spread across the 15 image range
@@ -116,7 +116,7 @@ export async function createAttributeChangeQuestions(userId) {
    const user_offset = userId % 5;
 
    for (let i = 1; i <= 5; i++) {
-      let base_folder = `data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`;
+      let base_folder = `${process.env.PUBLIC_URL}/data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`;
       base_folder += attribute_axis[i - 1] < 2 ? 'x/' : 'y/';
 
       // load the images of one attribute - potentially choose 
@@ -173,7 +173,7 @@ export async function createAttributePrecisionQuestions(userId) {
    const user_offset = userId % 5;
 
    for (let i = 1; i <= 5; i++) {
-      let base_folder = `data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`;
+      let base_folder = `${process.env.PUBLIC_URL}/data/attribute_axis/${selected_prompts[i - 1]}/${((user_offset + i) % 5 + 1).toString().padStart(3, '0')}/`;
       base_folder += attribute_axis[i - 1] < 2 ? 'x/' : 'y/';
 
       // load the images of one attribute - potentially choose 
@@ -226,7 +226,7 @@ export async function createSubspacePositionQuestions(userId) {
    const user_offset = userId % 5;
 
    for (let i = 1; i <= 5; i++) {
-      const base_folder = `data/subspace_position/${selected_prompts[i - 1]}/`;
+      const base_folder = `${process.env.PUBLIC_URL}/data/subspace_position/${selected_prompts[i - 1]}/`;
 
       // load reference image
       const reference_img = base_folder + "image_reference.jpg";
