@@ -46,7 +46,7 @@ const surveyTemplate = {
             "This experiment aims to evaluate different methods of creating continuous, semantically meaningful subspaces within the latent space of diffusion models for AI-generated images. These subspaces are designed to capture changes in specific image attributes, enabling users to interactively modify an image generated from an initial prompt. As perceived changes in image attributes are highly subjective, it is crucial to obtain feedback from real users on how well the subspaces capture the desired attributes.",
             "You will be asked to complete a number of image evaluation tasks, such as ordering a list of images according to certain attributes or judging the effect of a slider on a specified image attribute in the given examples. The survey will record your responses to the questions, as well as some general performance metrics. No personal or identifiable data will be collected, and the results cannot be linked to individual participants. The data collected will be used exclusively for scientific research purposes.",
             "Participation is entirely voluntary and you are free to withdraw from the study at any time. However, since no personal or identifying information is collected, it may not be possible to accurately identify and remover your data from the dataset once submitted.",
-            "Completing the study typically takes about 10 to 15 minutes.",
+            "Completing the study typically takes about 10 minutes.",
             "It is recommended to use a laptop or desktop computer for completing this survey. Some of the questions might only work in a limited manner on mobile devices."
          ]
       }, {
