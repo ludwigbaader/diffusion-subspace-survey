@@ -279,7 +279,7 @@ export function shuffleArray(array) {
 
 async function load_attribute_file(folder) {
    const response = await fetch(
-      "/" + folder + 'attribute_info.json',
+      folder + 'attribute_info.json',
       {
          headers: {
             'Content-Type': 'application/json',
