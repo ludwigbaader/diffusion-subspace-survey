@@ -213,7 +213,7 @@ export default function SurveyComponent() {
                const res = await fetch("https://script.google.com/macros/s/AKfycbzLrYE5ZHO5MigPJp6U1aiSWP5IzI5V58G75iZCUJBA5btRyzs0nfYqbcsaQYhJbffb/exec");
                const data = await res.json();
                localStorage.setItem("userid", data.userId);
-               setUserId(data.userID);
+               setUserId(data.userId);
             } catch (err) {
                console.error("Failed to fetch user ID", err);
                // use random userid as backup
