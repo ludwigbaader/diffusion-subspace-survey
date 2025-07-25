@@ -3,6 +3,7 @@ import { ReactQuestionFactory, SurveyQuestionElementBase } from "survey-react-ui
 import { Slider } from "@mui/material";
 import { createElement } from "react";
 import { LikertScaleButton } from "./LikertScaleButton";
+import { CustomImage } from "./CustomImage";
 
 const IMAGE_SLIDER_LIKERT_COMPONENT = "image-slider-likert";
 
@@ -131,10 +132,13 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
       }
       
       // image slider logic
+      // const imgID = (sliderPosition / 100) * (sourceImages.length - 1);
+      // const imgURL_0 = sourceImages[Math.floor(imgID)];
+      // const imgURL_1 = sourceImages[Math.ceil(imgID)];
+      // const interpolationFac = imgID - Math.floor(imgID);
+
       const imgID = (sliderPosition / 100) * (sourceImages.length - 1);
-      const imgURL_0 = sourceImages[Math.floor(imgID)];
-      const imgURL_1 = sourceImages[Math.ceil(imgID)];
-      const interpolationFac = imgID - Math.floor(imgID);
+      const imgURL_0 = sourceImages[Math.round(imgID)];
 
       // likert scale logic
       const handleSelect = (id) => {
@@ -207,15 +211,16 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
                      ...imgStyle,
                      backgroundColor: "#fff"
                   }}></div>
-                  <img
+                  <CustomImage path={imgURL_0} width={"300px"} />
+                  {/* <img
                      src={`${process.env.PUBLIC_URL}/${imgURL_0}`}
                      style={{
                         ...imgStyle,
                         //opacity: (1 - interpolationFac),
                      }}
                      alt="subspace-attribute-0"
-                  />
-                  <img
+                  /> */}
+                  {/* <img
                      src={`${process.env.PUBLIC_URL}/${imgURL_1}`}
                      style={{
                         ...imgStyle,
@@ -223,7 +228,7 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
                         mixBlendMode: "normal"
                      }}
                      alt="subspace-attribute-1"
-                  />
+                  /> */}
                </div>
                <div style={{ 
                   width: "80%",
