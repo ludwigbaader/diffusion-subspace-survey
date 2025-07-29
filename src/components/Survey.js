@@ -267,6 +267,7 @@ export default function SurveyComponent() {
       localStorage.setItem('currentPageName', pageName);
 
       survey.setValue("userId", userId);
+      survey.setValue("subspaceOffset", userId % 5);
       survey.setValue("fullScreenCounter", localStorage.getItem("fullScreenCounter") || "0");
       
       // Include page timings in survey data

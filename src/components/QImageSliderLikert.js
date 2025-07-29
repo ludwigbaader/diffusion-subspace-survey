@@ -55,6 +55,13 @@ export class QuestionImageSliderLikertModel extends Question {
    set categoryNames(val) {
       this.setPropertyValue("categoryNames", val);
    }
+
+   get subspaceId() {
+      return this.getPropertyValue("subspaceId");
+   }
+   set subspaceId(val) {
+      this.setPropertyValue("subspaceId", val);
+   }
 }
 
 export function registerImageSliderLikert() {
@@ -86,6 +93,9 @@ Serializer.addClass(
    }, {
       name: "categoryNames",
       category: "general"
+   }, {
+      name: "subspaceId",
+      category: "general"
    }],
    () => {
       return new QuestionImageSliderLikertModel("");
@@ -96,6 +106,13 @@ Serializer.addClass(
 export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
    constructor(props) {
       super(props);
+      
+      // initialize the value
+      this.question.value = {
+         "likert_value": null,
+         "subspace_id": this.question.subspaceId
+      }
+
       this.state = {
          value: this.question.value
       };
@@ -125,6 +142,9 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
    get categoryNames() {
       return this.question.categoryNames;
    }
+   get subspaceId() {
+      return this.question.subspaceId;
+   }
 
    renderImageSliderLikert(sliderPosition, sourceImages, sliderAttribute, likertQuestionText, numOfChoices, categoryNames) {
       const handleSliderPositionChange = (event, newPosition) => {
@@ -142,12 +162,15 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
 
       // likert scale logic
       const handleSelect = (id) => {
-         this.question.value = Number(id);
+         this.question.value = {
+            "likert_value": Number(id),
+            "subspace_id": this.question.subspaceId,
+         };
       }
 
       const likert_element = (id) => { 
          return (
-            <LikertScaleButton id={id} onClick={handleSelect} isSelected={id === this.question.value} />
+            <LikertScaleButton id={id} onClick={handleSelect} isSelected={id === this.question.value.likert_value} />
          );
       };
       const likert_buttons = [];

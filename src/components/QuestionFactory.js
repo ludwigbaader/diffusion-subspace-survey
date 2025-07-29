@@ -92,7 +92,8 @@ export async function createAttributeRankingQuestions(userId) {
          attribute: {
             start: attributes[0],
             end: attributes[1],
-         }
+         },
+         subspaceId: (user_offset + i) % 5 + 1
       });
    } 
 
@@ -150,7 +151,8 @@ export async function createAttributeChangeQuestions(userId) {
          categoryNames: [
             "Constant rate of change",
             "Varying rate of change"
-         ]
+         ],
+         subspaceId: (user_offset + i) % 5 + 1
       });
    }
 
@@ -207,7 +209,8 @@ export async function createAttributePrecisionQuestions(userId) {
          categoryNames: [
             "Image change does not match the attribute",
             "Image change matches the attribute"
-         ]
+         ],
+         subspaceId: (user_offset + i) % 5 + 1
       });
    }
 
@@ -248,7 +251,8 @@ export async function createSubspacePositionQuestions(userId) {
          position: [0.5, 0.5],
          image: subject_img,
          referenceImage: reference_img,
-         axisLabels: attribute_info["attribute"]
+         axisLabels: attribute_info["attribute"],
+         subspaceId: (user_offset + i) % 5 + 1
       });
    }
 

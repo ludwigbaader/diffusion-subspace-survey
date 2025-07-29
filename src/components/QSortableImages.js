@@ -30,6 +30,13 @@ export class QuestionSortableImagesModel extends Question {
    set attribute(val) {
       this.setPropertyValue("attribute", val);
    }
+
+   get subspaceId() {
+      return this.getPropertyValue("subspaceId");
+   }
+   set subspaceId(val) {
+      this.setPropertyValue("subspaceId", val);
+   }
 }
 
 export function registerSortableImages() {
@@ -51,6 +58,9 @@ Serializer.addClass(
       name: "attribute",
       category: "general",
       visibleIndex: 3
+   }, {
+      name: "subspaceId",
+      category: "general"
    }],
    function () {
       return new QuestionSortableImagesModel("");
@@ -63,11 +73,15 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
       super(props);
 
       const image_ids = [];
-      this.images.forEach(img => {
+      this.question.images.forEach(img => {
          const url_split = img.url.split("/");
          image_ids.push(url_split[url_split.length - 1]);
       });
-      this.question.value = [image_ids, null];
+      this.question.value = {
+         "image_ids": image_ids,
+         "order": null,
+         "subspace_id": this.question.subspaceId,
+      };
 
       this.state = { 
          value: this.question.value
@@ -86,6 +100,9 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
    get attribute() {
       return this.question.attribute;
    }
+   get subspaceId() {
+      return this.question.subspaceId;
+   }
 
    renderSortbaleImages(images, attribute) {
       const image_urls = [];
@@ -101,6 +118,11 @@ export class SurveyQuestionSortableImages extends SurveyQuestionElementBase {
             image_ids.push(url_split[url_split.length - 1]);
          });
          this.question.value = [image_ids, newOrder];
+         this.question.value = {
+            "image_ids": image_ids,
+            "order": newOrder,
+            "subspace_id": this.question.subspaceId,
+         };
       };
 
       const axisStyle = {

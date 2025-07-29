@@ -68,12 +68,15 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
       super(props);
 
       // initialize question value
-      const img_ids = [];
-      this.images.forEach(img => {
+      const image_ids = [];
+      this.question.images.forEach(img => {
          const url_split = img.url.split("/");
-         img_ids.push(url_split[url_split.length - 1]);
+         image_ids.push(url_split[url_split.length - 1]);
       });
-      this.question.value = [img_ids, null];
+      this.question.value = {
+         "image_ids": image_ids,
+         "order": null,
+      };
 
       this.state = {
          value: this.question.value
@@ -103,7 +106,10 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
             const url_split = img.url.split("/");
             image_ids.push(url_split[url_split.length - 1]);
          });
-         this.question.value = [image_ids, newOrder];
+         this.question.value = {
+            "image_ids": image_ids,
+            "order": newOrder,
+         };
       }
 
       const headingStyle = {

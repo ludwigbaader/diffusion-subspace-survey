@@ -42,6 +42,14 @@ export class QuestionImagePositionerModel extends Question {
    set axisLabels(val) {
       this.setPropertyValue("axisLabels", val);
    }
+
+   // subspaceID: stores which subspace the images are pulled from - for easier data evaluation down the road
+   get subspaceId() {
+      return this.getPropertyValue("subspaceId");
+   }
+   set subspaceId(val) {
+      this.setPropertyValue("subspaceId", val);
+   }
 }
 
 export function registerImagePositioner() {
@@ -67,6 +75,9 @@ Serializer.addClass(
    }, {
       name: "axisLabels",
       category: "general"
+   }, {
+      name: "subspaceId",
+      category: "general"
    }],
    () => {
       return new QuestionImagePositionerModel("");
@@ -77,6 +88,10 @@ Serializer.addClass(
 export class SurveyQuestionImagePositioner extends SurveyQuestionElementBase {
    constructor(props) {
       super(props);
+
+      // initialize value
+      this.question.value = [null, this.question.subspaceId];
+
       this.state = {
          value: this.question.value
       };
@@ -100,10 +115,13 @@ export class SurveyQuestionImagePositioner extends SurveyQuestionElementBase {
    get axisLabels() {
       return this.question.axisLabels;
    }
+   get subspaceId() {
+      return this.question.subspaceId;
+   }
 
    renderImagePositioner(position, image, referenceImage, axisLabels) {
       const handlePositionChange = (newPosition) => {
-         this.question.value = newPosition;
+         this.question.value = [newPosition, this.question.subspaceId];
          this.question.position = newPosition;
       };
 
