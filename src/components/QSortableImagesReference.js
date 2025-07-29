@@ -66,6 +66,15 @@ Serializer.addClass(
 export class SurveyQuestionSortableImagesReference extends SurveyQuestionElementBase {
    constructor(props) {
       super(props);
+
+      // initialize question value
+      const img_ids = [];
+      this.images.forEach(img => {
+         const url_split = img.url.split("/");
+         img_ids.push(url_split[url_split.length - 1]);
+      });
+      this.question.value = [img_ids, null];
+
       this.state = {
          value: this.question.value
       };
@@ -96,9 +105,6 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
          });
          this.question.value = [image_ids, newOrder];
       }
-
-      // set the initial value
-      handleImageOrderChange(null);
 
       const headingStyle = {
          color: "#000",
