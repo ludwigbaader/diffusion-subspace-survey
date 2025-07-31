@@ -195,6 +195,13 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
          fontWeight: "bold"
       }
 
+      const sliderAnchorStyle = {
+         color: "#000",
+         fontSize: "small",
+         fontWeight: "600",
+         width: "15%"
+      }
+
       const mobileStyles = `
          @media (max-width: 768px) {
             .image-slider-likert-container {
@@ -267,13 +274,17 @@ export class SurveyQuestionImageSliderLikert extends SurveyQuestionElementBase {
                   }}>
                      {sliderAttribute}:
                   </div>
-                  <Slider
-                     value={sliderPosition}
-                     onChange={handleSliderPositionChange}
-                     sx={{
-                        color: "#19b394"
-                     }}
-                  />
+                  <div style={{ display: "flex", width: "100%", alignItems: "center" }}>
+                     <div style={sliderAnchorStyle}>0%</div>
+                     <Slider
+                        value={sliderPosition}
+                        onChange={handleSliderPositionChange}
+                        sx={{
+                           color: "#19b394"
+                        }}
+                     />
+                     <div style={sliderAnchorStyle}>100%</div>
+                  </div>
                </div>
             </div>
             <div>

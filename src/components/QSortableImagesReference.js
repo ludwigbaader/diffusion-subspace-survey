@@ -122,6 +122,30 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
          textAlign: "left"
       }
 
+      const axisStyle = {
+         display: "flex",
+         flexDirection: "column",
+         justifyContent: "space-between",
+         alignItems: "end",
+         alignSelf: "stretch",
+         // width: "60px",
+         height: "100%",
+         padding: "0 10px",
+         //marginLeft: "50px",
+         //borderLeft: "2px solid #ddd",
+         fontSize: "14px",
+         fontWeight: "bold",
+         color: "#555",
+      };
+
+      const axisLabelStyle = {
+         writingMode: "vertical-rl",
+         textOrientation: "mixed",
+         textAlign: "left",
+         padding: "10px",
+         transform: "rotate(180deg)"
+      };
+
       const mobileStyles = `
          @media (max-width: 768px) {
             .sortable-images-container {
@@ -172,11 +196,19 @@ export class SurveyQuestionSortableImagesReference extends SurveyQuestionElement
                   <div className="heading-style" style={headingStyle}>
                      Images emphasizing the attribute "{attribute}":
                   </div>
-                  <div>
-                     <SortableImageList
-                        images={images}
-                        onChange={handleImageOrderChange}
-                     />
+                  <div style={{ position: "relative" }}>
+                     <div style={{ position: "absolute", height: "100%", left: "-60px" }}>
+                        <div style={axisStyle}>
+                           <div style={axisLabelStyle}>emphasizes attribute the most</div>
+                           <div style={axisLabelStyle}>emphasizes attribute the least</div>
+                        </div>
+                     </div>
+                     <div>
+                        <SortableImageList
+                           images={images}
+                           onChange={handleImageOrderChange}
+                        />
+                     </div>
                   </div>
                </div>
                <div className="reference-image-section">

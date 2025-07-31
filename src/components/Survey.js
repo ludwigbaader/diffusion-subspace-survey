@@ -62,10 +62,10 @@ const surveyTemplate = {
       name: "DemographicData",
       title: "Demographic Data",
       elements: [{
-         type: "dropdown",
-         name: "Age",
-         title: "Select your age:",
-         choices: ["15 or younger", "16-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65 or older"]
+         type: "text",
+         inputType: "number",
+         name: "age",
+         title: "Specify your age:"
       }, {
          type: "dropdown",
          name: "Gender",
@@ -76,7 +76,7 @@ const surveyTemplate = {
          name: "Education",
          title: "Select your highest degree of education",
          description: "Completed or currently striving for",
-         choices: ["Less than high school degree", "High school degree or equivalent", "Bachelor degree", "Graduate degree (Masters, PhD, M.D)"]
+         choices: ["Less than high school degree", "High school degree or equivalent", "Bachelor's degree", "Master's degree", "Doctoral degree or higher"]
       }, {
          type: "likert-scale",
          name: "AiFamiliarity",
