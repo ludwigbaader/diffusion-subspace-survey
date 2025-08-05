@@ -180,10 +180,10 @@ async function generateSurveyConfiguration(userID, pageLayout) {
       // option B - have all questions of one type collected on a single page
       surveyPages.push(...[
          createStudyPage("page_01", "Questions 1/5", subspace_ranking_questions),
-         createStudyPage("page_03", "Questions 2/5", attribute_precision_questions),
-         createStudyPage("page_02", "Questions 3/5", attribute_ranking_questions),
+         createStudyPage("page_02", "Questions 2/5", attribute_ranking_questions),
          // createStudyPage("page_04", "Questions 4/6", attribute_change_questions),
-         createStudyPage("page_05", "Questions 4/5", subspace_position_questions),
+         createStudyPage("page_05", "Questions 3/5", subspace_position_questions),
+         createStudyPage("page_03", "Questions 4/5", attribute_precision_questions),
       ]);
    }
 
